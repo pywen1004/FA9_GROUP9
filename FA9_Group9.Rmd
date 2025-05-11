@@ -1,0 +1,67 @@
+
+---
+title: "FA9_GROUP9"
+author: "Arago, Fe Benito, Santiago, Tupas"
+date: "`r Sys.Date()`"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+[https://github.com/pywen1004/FA9_GROUP9.git](https://github.com/pywen1004/FA9_GROUP9.git)
+
+## Lap Time Data
+
+```{r}
+lap_times <- c(
+  10.23, 52.41, 17.85, 39.49, 12.21, 14.86, 8.47, 4.46, 14.40, 10.51,
+  12.04, 1.98, 50.13, 12.27, 5.62, 21.16, 46.71, 26.69, 10.25, 6.53,
+  53.06, 6.17, 5.17, 36.05, 1.86, 11.58, 40.17, 5.42, 8.89, 24.29,
+  5.28, 13.00, 10.21, 10.83, 5.06, 3.54, 28.42, 49.70, 24.34, 14.14,
+  42.93, 28.43, 1.39, 6.05, 2.76, 69.41, 72.57, 28.69, 26.07, 1.02
+)
+```
+
+## Frequency Distribution Table
+
+```{r}
+breaks <- seq(0, ceiling(max(lap_times)/10)*10, by = 10)
+freq_table <- table(cut(lap_times, breaks, right = FALSE))
+freq_table
+```
+
+## Mean and Standard Deviation
+
+```{r}
+mean_time <- mean(lap_times)
+sd_time <- sd(lap_times)
+
+mean_time
+sd_time
+```
+
+## Histogram and Normal Distribution Curve
+
+```{r}
+hist(lap_times, breaks=10, probability=TRUE, col="lightblue",
+     main="Lap Time Distribution with Normal Curve",
+     xlab="Lap Time (seconds)", xlim=c(0, max(lap_times)))
+curve(dnorm(x, mean=mean_time, sd=sd_time), col="darkblue", lwd=2, add=TRUE)
+```
+
+## Percentages Within 1sd, 2sd, and 3sd
+
+```{r}
+within_1sd <- sum(lap_times > (mean_time - sd_time) & lap_times < (mean_time + sd_time)) / length(lap_times)
+within_2sd <- sum(lap_times > (mean_time - 2*sd_time) & lap_times < (mean_time + 2*sd_time)) / length(lap_times)
+within_3sd <- sum(lap_times > (mean_time - 3*sd_time) & lap_times < (mean_time + 3*sd_time)) / length(lap_times)
+
+percentages <- data.frame(
+  Range = c("Within 1 sd", "Within 2 sd", "Within 3 sd"),
+  Percentage = round(c(within_1sd, within_2sd, within_3sd) * 100, 2)
+)
+
+percentages
+```
